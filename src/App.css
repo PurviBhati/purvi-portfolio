@@ -2367,7 +2367,7 @@ canvas {
     flex: none; width: 100%; height: auto;
     padding: 40px 30px; border-right: none;
     border-bottom: 1px solid rgba(0, 255, 102, 0.15);
-    text-align: center; align-items: center;
+    text-align: center; align-items: flex-start;
   }
   .contact-list { width: 100%; height: auto; padding: 35px 30px; overflow: visible; }
   .contact-item { flex-direction: column; align-items: center; gap: 4px; text-align: center; }
@@ -2538,7 +2538,7 @@ canvas {
     flex: none; width: 100%; height: auto;
     padding: 40px 30px; border-right: none;
     border-bottom: 1px solid rgba(0, 255, 102, 0.15);
-    text-align: center; align-items: center;
+    text-align: center; align-items: flex-start;
   }
   .experience-list { width: 100%; height: auto; padding: 35px 30px; overflow: visible; }
   .experience-top { flex-direction: column; align-items: center; gap: 4px; }
