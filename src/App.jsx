@@ -1,6 +1,6 @@
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Float, Text } from "@react-three/drei";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./App.css";
 
 
@@ -11,7 +11,7 @@ import "./App.css";
 function DigitalParticles() {
   const particlesRef = useRef();
 
-  const positions = useMemo(() => {
+    const [positions] = useState(() => {
     const count = 2200;
     const array = new Float32Array(count * 3);
 
@@ -28,7 +28,7 @@ function DigitalParticles() {
     }
 
     return array;
-  }, []);
+  });
 
   useFrame((state, delta) => {
     if (!particlesRef.current) return;
@@ -210,121 +210,27 @@ function DigitalStructure({
 
 
 /* =========================================================
-   CLICKABLE STRUCTURE
-========================================================= */
-
-function ClickableStructure({
-  position,
-  scale = 1,
-  onClick,
-}) {
-  const meshRef = useRef();
-  const [hovered, setHovered] = useState(false);
-
-  useFrame(() => {
-    if (!meshRef.current) return;
-
-    meshRef.current.rotation.x += 0.001;
-    meshRef.current.rotation.y += 0.002;
-
-    const targetScale = hovered
-      ? scale * 1.08
-      : scale;
-
-    meshRef.current.scale.x +=
-      (targetScale - meshRef.current.scale.x) * 0.08;
-
-    meshRef.current.scale.y +=
-      (targetScale - meshRef.current.scale.y) * 0.08;
-
-    meshRef.current.scale.z +=
-      (targetScale - meshRef.current.scale.z) * 0.08;
-  });
-
-  return (
-    <group
-      position={position}
-      onClick={(event) => {
-        event.stopPropagation();
-
-        if (onClick) {
-          onClick();
-        }
-      }}
-      onPointerOver={(event) => {
-        event.stopPropagation();
-
-        setHovered(true);
-        document.body.style.cursor = "pointer";
-      }}
-      onPointerOut={() => {
-        setHovered(false);
-        document.body.style.cursor = "default";
-      }}
-    >
-
-      {/* MAIN CLICKABLE BOX */}
-
-      <mesh
-        ref={meshRef}
-        scale={scale}
-      >
-        <boxGeometry args={[1, 1, 1]} />
-
-        <meshBasicMaterial
-          color="#00ff66"
-          wireframe
-          transparent
-          opacity={hovered ? 0.65 : 0.45}
-        />
-      </mesh>
-
-
-      {/* GLOWING CORE */}
-
-      <mesh
-        scale={hovered ? 0.18 : 0.12}
-      >
-        <sphereGeometry args={[1, 16, 16]} />
-
-        <meshBasicMaterial
-          color="#00ff66"
-          transparent
-          opacity={hovered ? 0.9 : 0.5}
-        />
-      </mesh>
-
-    </group>
-  );
-}
-
-
-/* =========================================================
    BINARY STREAM
 ========================================================= */
 
 function BinaryStream({ progress }) {
   const groupRef = useRef();
 
-const binaryData = useMemo(() => {
+const [binaryData] = useState(() => {
     const data = [];
 
     for (let i = 0; i < 380; i++) {
       data.push({
         value: Math.random() > 0.5 ? "0" : "1",
-
         x: (Math.random() - 0.5) * 26,
-
         y: (Math.random() - 0.5) * 18,
-
         z: -10 - Math.random() * 90,
-
         size: 0.3 + Math.random() * 0.5,
       });
     }
 
     return data;
-  }, []);
+  });
 
   useFrame(() => {
     if (!groupRef.current) return;
@@ -572,6 +478,85 @@ function AboutSection({
   onWheel,
 }) {
 
+  const sectionRef = useRef(null);
+  const aboutLeftRef = useRef(null);
+  const onWheelRef = useRef(onWheel);
+  const aboutProgressRef = useRef(aboutProgress);
+  const touchStartY = useRef(null);
+
+  useEffect(() => {
+    onWheelRef.current = onWheel;
+  }, [onWheel]);
+
+  useEffect(() => {
+    aboutProgressRef.current = aboutProgress;
+  }, [aboutProgress]);
+
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+
+    const handleDelta = (deltaY) => {
+      const contentEl = sectionRef.current?.querySelector(
+        ".about-window-content"
+      );
+      const scrollingDown = deltaY > 0;
+      const atMax = aboutProgressRef.current >= 1;
+      const contentScrollTop = contentEl ? contentEl.scrollTop : 0;
+      const contentAtMax = contentEl
+        ? contentScrollTop + contentEl.clientHeight >= contentEl.scrollHeight - 1
+        : true;
+
+      // Fade fully revealed, scrolling further down
+      // → manually scroll the mobile window content down.
+      if (atMax && scrollingDown && contentEl && !contentAtMax) {
+        contentEl.scrollTop += deltaY;
+        return;
+      }
+
+      // .about-left has scrolled content, scrolling up
+      // → manually scroll it back toward the top first.
+      if (!scrollingDown && contentScrollTop > 0 && contentEl) {
+        contentEl.scrollTop += deltaY;
+        return;
+      }
+
+      // Otherwise: drive the identity/bio fade animation.
+      onWheelRef.current(deltaY);
+    };
+
+    const wheelHandler = (event) => {
+      event.preventDefault();
+      handleDelta(event.deltaY);
+    };
+
+    const touchStartHandler = (event) => {
+      touchStartY.current = event.touches[0].clientY;
+    };
+
+    const touchMoveHandler = (event) => {
+      if (touchStartY.current === null) return;
+
+      event.preventDefault();
+
+      const touchY = event.touches[0].clientY;
+      const deltaY = (touchStartY.current - touchY) * 1.5;
+
+      touchStartY.current = touchY;
+      handleDelta(deltaY);
+    };
+
+    el.addEventListener("wheel", wheelHandler, { passive: false });
+    el.addEventListener("touchstart", touchStartHandler, { passive: true });
+    el.addEventListener("touchmove", touchMoveHandler, { passive: false });
+
+    return () => {
+      el.removeEventListener("wheel", wheelHandler);
+      el.removeEventListener("touchstart", touchStartHandler);
+      el.removeEventListener("touchmove", touchMoveHandler);
+    };
+  }, []);
+
   /*
     aboutProgress
 
@@ -601,7 +586,7 @@ function AboutSection({
   return (
     <section
       className="about-window"
-      onWheel={onWheel}
+      ref={sectionRef}
     >
 
       {/* =================================================
@@ -668,7 +653,10 @@ function AboutSection({
            exactly as the CSS flex-column expects.
         ================================================= */}
 
-        <div className="about-left">
+        <div
+          className="about-left"
+          ref={aboutLeftRef}
+        >
 
           {/* IDENTITY */}
 
@@ -1630,16 +1618,13 @@ function App() {
      ABOUT SCROLL
   ======================================================= */
 
-  const handleAboutWheel = (event) => {
-
-    event.preventDefault();
-    event.stopPropagation();
+  const handleAboutWheel = (deltaY) => {
 
     setAboutProgress((previous) => {
 
       const next =
         previous +
-        event.deltaY * 0.0025;
+        deltaY * 0.0025;
 
       return Math.max(
         0,
@@ -1653,26 +1638,21 @@ function App() {
      MAIN WORLD SCROLL
   ======================================================= */
 
-  useEffect(() => {
+    useEffect(() => {
 
     if (!entered) return;
 
-    const handleWheel = (event) => {
+    let touchStartY = 0;
 
-      /*
-        If an About window is open,
-        its own scroll system handles the wheel.
-      */
+    const handleWheel = (event) => {
 
       if (activeSection) {
         return;
       }
 
-
       if (!hasScrolled) {
         setHasScrolled(true);
       }
-
 
       setProgress((previous) => {
 
@@ -1680,30 +1660,54 @@ function App() {
           previous +
           event.deltaY * 0.008;
 
-        return Math.max(
-          0,
-          Math.min(1, next)
-        );
+        return Math.max(0, Math.min(1, next));
+      });
+
+    };
+
+    const handleTouchStart = (event) => {
+
+      touchStartY = event.touches[0].clientY;
+
+    };
+
+    const handleTouchMove = (event) => {
+
+      if (activeSection) {
+        return;
+      }
+
+      if (!hasScrolled) {
+        setHasScrolled(true);
+      }
+
+      const touchY = event.touches[0].clientY;
+      const deltaY = (touchStartY - touchY) * 1.5;
+
+      touchStartY = touchY;
+
+      setProgress((previous) => {
+
+        const next =
+          previous +
+          deltaY * 0.008;
+
+        return Math.max(0, Math.min(1, next));
       });
 
     };
 
 
-    window.addEventListener(
-      "wheel",
-      handleWheel,
-      {
-        passive: true,
-      }
-    );
+    window.addEventListener("wheel", handleWheel, { passive: true });
+    window.addEventListener("touchstart", handleTouchStart, { passive: true });
+    window.addEventListener("touchmove", handleTouchMove, { passive: true });
 
 
     return () => {
 
-      window.removeEventListener(
-        "wheel",
-        handleWheel
-      );
+      window.removeEventListener("wheel", handleWheel);
+      window.removeEventListener("touchstart", handleTouchStart);
+      window.removeEventListener("touchmove", handleTouchMove);
 
     };
 

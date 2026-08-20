@@ -29,6 +29,8 @@ body {
   width: 100vw;
   height: 100vh;
   overflow: hidden;
+  overscroll-behavior: none;
+  touch-action: none;
 }
 
 canvas {
@@ -1219,11 +1221,12 @@ canvas {
 
   .about-window {
     width: 94vw;
-    height: 92vh;
+    height: min(92dvh, 760px);
   }
 
   .about-window-content {
     overflow-y: auto;
+    overflow-x: hidden;
 
     display: flex;
 
@@ -1236,9 +1239,17 @@ canvas {
     flex: none;
 
     width: 100%;
-    height: 360px;
+    height: auto;
 
-    min-height: 360px;
+    min-height: 0;
+
+    touch-action: pan-y;
+  }
+
+  .about-photo img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
   }
 
   .about-left {
@@ -1252,6 +1263,8 @@ canvas {
       30px;
 
     overflow: visible;
+
+    touch-action: pan-y;
 
     justify-content: flex-start;
   }
@@ -1343,7 +1356,7 @@ canvas {
 
   .about-window {
     width: 96vw;
-    height: 94vh;
+    height: 94dvh;
   }
 
   .about-window-header {
@@ -1353,8 +1366,7 @@ canvas {
   }
 
   .about-photo {
-    height: 320px;
-    min-height: 320px;
+    min-height: 132px;
   }
 
   .about-photo::after {
@@ -1367,7 +1379,7 @@ canvas {
 
   .about-left {
     padding:
-      40px
+      24px
       22px;
   }
 
@@ -1388,9 +1400,9 @@ canvas {
   }
 
   .about-info p {
-    font-size: 13px;
+    font-size: 12px;
 
-    line-height: 1.7;
+    line-height: 1.45;
   }
 
   .about-data {
@@ -1601,7 +1613,7 @@ canvas {
 @media (max-width: 700px) {
 
   .skills-window-content {
-    overflow-y: auto;
+    overflow: hidden;
 
     flex-direction: column;
   }
@@ -1610,9 +1622,9 @@ canvas {
     flex: none;
 
     width: 100%;
-    height: auto;
+    height: 22%;
 
-    padding: 40px 30px;
+    padding: 18px 24px;
 
     border-right: none;
 
@@ -1627,9 +1639,9 @@ canvas {
     width: 100%;
     height: auto;
 
-    padding: 35px 30px;
+    padding: 18px 24px;
 
-    overflow: visible;
+    overflow: hidden;
   }
 }
 
@@ -1769,89 +1781,58 @@ canvas {
 
 .achievement-marker {
   position: absolute;
-
   left: 0;
   top: 4px;
-
   width: 11px;
   height: 11px;
-
   border-radius: 50%;
-
   background: #010302;
-
   border: 1px solid #00ff66;
-
   box-shadow: 0 0 10px rgba(0, 255, 102, 0.6);
 }
 
 .achievement-marker::after {
   content: "";
-
   position: absolute;
-
   inset: 3px;
-
   border-radius: 50%;
-
   background: #00ff66;
 }
 
 .achievement-tag {
   display: inline-block;
-
   font-family: "JetBrains Mono", monospace;
-
   font-size: 8px;
-
   letter-spacing: 2px;
-
   color: #010302;
-
   background: #39ff88;
-
   padding: 3px 8px;
-
   margin-bottom: 10px;
 }
 
 .achievement-title {
   font-family: "Space Grotesk", sans-serif;
-
   font-size: 16px;
-
   font-weight: 600;
-
   letter-spacing: -0.2px;
-
   color: #eafff0;
-
   margin-bottom: 4px;
 }
 
 .achievement-org {
   display: block;
-
   font-family: "JetBrains Mono", monospace;
-
   font-size: 10px;
-
   letter-spacing: 1px;
-
   color: rgba(220, 255, 230, 0.4);
-
   margin-bottom: 10px;
 }
 
 .achievement-desc {
   max-width: 480px;
-
   font-family: "Space Grotesk", sans-serif;
-
   font-size: 13px;
-
   line-height: 1.75;
-
   color: rgba(220, 255, 230, 0.62);
 }
 
@@ -1863,7 +1844,7 @@ canvas {
 @media (max-width: 700px) {
 
   .achievements-window-content {
-    overflow-y: auto;
+    overflow: hidden;
 
     flex-direction: column;
   }
@@ -1872,9 +1853,9 @@ canvas {
     flex: none;
 
     width: 100%;
-    height: auto;
+    height: 24%;
 
-    padding: 40px 30px;
+    padding: 18px 24px;
 
     border-right: none;
 
@@ -1889,9 +1870,9 @@ canvas {
     width: 100%;
     height: auto;
 
-    padding: 35px 30px;
+    padding: 18px 24px;
 
-    overflow: visible;
+    overflow: hidden;
   }
 }
 /* =========================================================
@@ -2139,7 +2120,7 @@ canvas {
 @media (max-width: 700px) {
 
   .projects-window-content {
-    overflow-y: auto;
+    overflow: hidden;
 
     flex-direction: column;
   }
@@ -2148,9 +2129,9 @@ canvas {
     flex: none;
 
     width: 100%;
-    height: auto;
+    height: 24%;
 
-    padding: 40px 30px;
+    padding: 18px 24px;
 
     border-right: none;
 
@@ -2165,9 +2146,9 @@ canvas {
     width: 100%;
     height: auto;
 
-    padding: 35px 30px;
+    padding: 18px 24px;
 
-    overflow: visible;
+    overflow: hidden;
   }
 }
 
@@ -2362,14 +2343,14 @@ canvas {
 }
 
 @media (max-width: 700px) {
-  .contact-window-content { overflow-y: auto; flex-direction: column; }
+  .contact-window-content { overflow: hidden; flex-direction: column; }
   .contact-intro {
-    flex: none; width: 100%; height: auto;
-    padding: 40px 30px; border-right: none;
+    flex: none; width: 100%; height: 24%;
+    padding: 18px 24px; border-right: none;
     border-bottom: 1px solid rgba(0, 255, 102, 0.15);
     text-align: center; align-items: flex-start;
   }
-  .contact-list { width: 100%; height: auto; padding: 35px 30px; overflow: visible; }
+  .contact-list { width: 100%; height: 76%; padding: 18px 24px; overflow: hidden; }
   .contact-item { flex-direction: column; align-items: center; gap: 4px; text-align: center; }
   .contact-value { text-align: center; }
 }
@@ -2533,14 +2514,14 @@ canvas {
 }
 
 @media (max-width: 700px) {
-  .experience-window-content { overflow-y: auto; flex-direction: column; }
+  .experience-window-content { overflow: hidden; flex-direction: column; }
   .experience-intro {
-    flex: none; width: 100%; height: auto;
-    padding: 40px 30px; border-right: none;
+    flex: none; width: 100%; height: 24%;
+    padding: 18px 24px; border-right: none;
     border-bottom: 1px solid rgba(0, 255, 102, 0.15);
     text-align: center; align-items: flex-start;
   }
-  .experience-list { width: 100%; height: auto; padding: 35px 30px; overflow: visible; }
+  .experience-list { width: 100%; height: 76%; padding: 18px 24px; overflow: hidden; }
   .experience-top { flex-direction: column; align-items: center; gap: 4px; }
   .experience-org { text-align: center; }
   .experience-bullets { text-align: center; }
