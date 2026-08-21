@@ -1,4 +1,4 @@
-import { Canvas, useFrame } from "@react-three/fiber";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Float, Text } from "@react-three/drei";
 import { useEffect, useRef, useState } from "react";
 import "./App.css";
@@ -184,32 +184,6 @@ function InteractiveStructure({
 
 
 /* =========================================================
-   DIGITAL STRUCTURE
-========================================================= */
-
-function DigitalStructure({
-  position,
-  scale = 1,
-}) {
-  return (
-    <mesh
-      position={position}
-      scale={scale}
-    >
-      <boxGeometry args={[1, 1, 1]} />
-
-      <meshBasicMaterial
-        color="#00ff66"
-        wireframe
-        transparent
-        opacity={0.25}
-      />
-    </mesh>
-  );
-}
-
-
-/* =========================================================
    BINARY STREAM
 ========================================================= */
 
@@ -272,6 +246,9 @@ function DigitalWorld({
   progress,
   setActiveSection,
 }) {
+  const { size } = useThree();
+  const isPhone = size.width <= 700;
+
   return (
     <>
 
@@ -287,67 +264,6 @@ function DigitalWorld({
       />
 
 
-      {/* BACKGROUND STRUCTURES */}
-<DigitalStructure
-        position={[-5, 2, -12]}
-        scale={3}
-      />
-
-      <DigitalStructure
-        position={[6, -1, -18]}
-        scale={2.5}
-      />
-
-      <DigitalStructure
-        position={[-7, -3, -25]}
-        scale={5}
-      />
-
-      <DigitalStructure
-        position={[3, 4, -28]}
-        scale={3.5}
-      />
-
-      <DigitalStructure
-        position={[7, 3, -32]}
-        scale={6}
-      />
-
-      <DigitalStructure
-        position={[-3, -2, -36]}
-        scale={4}
-      />
-
-      <DigitalStructure
-        position={[-4, 4, -42]}
-        scale={7}
-      />
-
-      <DigitalStructure
-        position={[8, -3, -46]}
-        scale={4.5}
-      />
-
-      <DigitalStructure
-        position={[4, -4, -55]}
-        scale={8}
-      />
-
-      <DigitalStructure
-        position={[-8, 2, -62]}
-        scale={5.5}
-      />
-
-      <DigitalStructure
-        position={[2, 5, -68]}
-        scale={6.5}
-      />
-
-      <DigitalStructure
-        position={[-2, -5, -75]}
-        scale={7.5}
-      />
-
       {/* ADDITIONAL CLICKABLE STRUCTURE */}
 
       {/* CENTRAL USER PROFILE NODE */}
@@ -358,7 +274,7 @@ function DigitalWorld({
         floatIntensity={0.5}
       >
         <InteractiveStructure
-          position={[0, 0, -20]}
+          position={isPhone ? [1.5, 0.2, -16] : [0, 0, -20]}
           scale={2}
           label="ABOUT"
           onClick={() => {
@@ -376,7 +292,7 @@ function DigitalWorld({
         floatIntensity={0.5}
       >
         <InteractiveStructure
-          position={[-6, 1, -38]}
+          position={isPhone ? [-1.5, 1.1, -28] : [-6, 1, -38]}
           scale={2}
           label="SKILLS"
           
@@ -394,7 +310,7 @@ function DigitalWorld({
         floatIntensity={0.5}
       >
         <InteractiveStructure
-          position={[-4, -3, -78]}
+          position={isPhone ? [1.3, -1.1, -61] : [-4, -3, -78]}
           scale={2}
           label="EXPERIENCE"
           onClick={() => {
@@ -409,7 +325,7 @@ function DigitalWorld({
         floatIntensity={0.5}
       >
         <InteractiveStructure
-          position={[6, -1, -48]}
+          position={isPhone ? [1.5, -0.9, -39] : [6, -1, -48]}
           scale={2}
           label="Achievements"
           onClick={() => {
@@ -425,7 +341,7 @@ function DigitalWorld({
         floatIntensity={0.5}
       >
         <InteractiveStructure
-          position={[4, 2, -58]}
+          position={isPhone ? [-1.4, 1, -50] : [4, 2, -58]}
           scale={2}
           label="PROJECTS"
           onClick={() => {
@@ -445,9 +361,11 @@ function DigitalWorld({
 function CameraController({
   progress,
 }) {
+  const { size } = useThree();
+
   useFrame((state) => {
     const startZ = 5;
-    const endZ = -70  ;
+    const endZ = size.width <= 700 ? -53 : -70;
 
     const targetZ =
       startZ +
@@ -455,6 +373,9 @@ function CameraController({
 
     state.camera.position.z +=
       (targetZ - state.camera.position.z) * 0.08;
+
+    state.camera.position.x +=
+      (0 - state.camera.position.x) * 0.08;
   });
 
   return null;

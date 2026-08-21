@@ -1636,12 +1636,15 @@ canvas {
   }
 
   .skills-groups {
+    flex: 1;
     width: 100%;
-    height: auto;
+    min-height: 0;
 
     padding: 18px 24px;
 
-    overflow: hidden;
+    overflow-y: auto;
+    overflow-x: hidden;
+    touch-action: pan-y;
   }
 }
 
@@ -1867,12 +1870,15 @@ canvas {
   }
 
   .achievements-list {
+    flex: 1;
     width: 100%;
-    height: auto;
+    min-height: 0;
 
     padding: 18px 24px;
 
-    overflow: hidden;
+    overflow-y: auto;
+    overflow-x: hidden;
+    touch-action: pan-y;
   }
 }
 /* =========================================================
@@ -2143,12 +2149,15 @@ canvas {
   }
 
   .projects-list {
+    flex: 1;
     width: 100%;
-    height: auto;
+    min-height: 0;
 
     padding: 18px 24px;
 
-    overflow: hidden;
+    overflow-y: auto;
+    overflow-x: hidden;
+    touch-action: pan-y;
   }
 }
 
@@ -2350,7 +2359,15 @@ canvas {
     border-bottom: 1px solid rgba(0, 255, 102, 0.15);
     text-align: center; align-items: flex-start;
   }
-  .contact-list { width: 100%; height: 76%; padding: 18px 24px; overflow: hidden; }
+  .contact-list {
+    flex: 1;
+    width: 100%;
+    min-height: 0;
+    padding: 18px 24px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    touch-action: pan-y;
+  }
   .contact-item { flex-direction: column; align-items: center; gap: 4px; text-align: center; }
   .contact-value { text-align: center; }
 }
@@ -2521,7 +2538,15 @@ canvas {
     border-bottom: 1px solid rgba(0, 255, 102, 0.15);
     text-align: center; align-items: flex-start;
   }
-  .experience-list { width: 100%; height: 76%; padding: 18px 24px; overflow: hidden; }
+  .experience-list {
+    flex: 1;
+    width: 100%;
+    min-height: 0;
+    padding: 18px 24px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    touch-action: pan-y;
+  }
   .experience-top { flex-direction: column; align-items: center; gap: 4px; }
   .experience-org { text-align: center; }
   .experience-bullets { text-align: center; }
