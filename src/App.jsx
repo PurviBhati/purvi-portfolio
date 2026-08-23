@@ -620,7 +620,7 @@ function AboutSection({
             >
 
               <p>
-                Full-stack developer and AI/ML enthusiast with hands-on experience building real products end-to end —
+                Full-stack developer and AI/ML enthusiast with hands-on experience building real products end-to-end —
                 independently handling AI integration and the backend decision layer for an AI communication platform, and
                 leading the AI component of a hackathon-winning project at my company. Continually curious about how AI can
                 power smarter, more adaptive workflows
@@ -788,11 +788,10 @@ function SkillsSection({ onClose }) {
     {
       label: "PROGRAMMING LANGUAGES",
       skills: [
-        { name: "Python", level: 88 },
-        { name: "JavaScript", level: 85 },
-        { name: "Java", level: 90 },
-        { name: "C / C++", level: 65 },
-        { name: "SQL", level: 75 },
+        { name: "Python", level: 72 },
+        { name: "JavaScript", level: 65 },
+        { name: "Java", level: 95 },
+        { name: "C / C++", level: 75 },
       ],
     },
     {
@@ -806,9 +805,9 @@ function SkillsSection({ onClose }) {
     {
       label: "BACKEND",
       skills: [
-        { name: "Python (REST APIs)", level: 82 },
+        { name: "Python (REST APIs)", level: 65 },
         { name: "Supabase", level: 80 },
-        { name: "MySQL", level: 70 },
+        { name: "MySQL", level: 75 },
       ],
     },
     {
@@ -816,16 +815,15 @@ function SkillsSection({ onClose }) {
       skills: [
         { name: "AI Integration", level: 85 },
         { name: "Prompt Engineering", level: 88 },
-        { name: "Jina AI", level: 75 },
-        { name: "NLP Fundamentals", level: 65 },
+        { name: "OpenClaw", level: 80 },
+        {name: "Python Libraries", level: 65},
+        
       ],
     },
     {
-      label: "TOOLS",
+      label: "IDE",
       skills: [
-        { name: "GitHub", level: 60 },
-        { name: "VS Code", level: 90 },
-        { name: "Openclaw", level: 80 },
+        { name: "Microsoft Visual Studio (.NET)", level: 60 },
       ],
     },
   ];
@@ -1130,7 +1128,7 @@ function ProjectsSection({ onClose }) {
           </h2>
 
           <p>
-            Things I've built, from desktop application to AI platforms .
+            Things I've built, from desktop applications to AI platforms.
           </p>
 
         </div>
@@ -1321,14 +1319,14 @@ function ExperienceSection({ onClose }) {
 
   const roles = [
     {
-      title: "Technical Support & Client Operation Executive",
+      title: "Technical Support & Client Operations Executive",
       org: "Appsrow Solution",
       period: "Feb 2026 — Jun 2026",
       bullets: [
         "Built an AI-powered communication intelligence platform that automatically forwards client requests/approvals from",
         "WhatsApp and Slack to the appropriate team groups/chats—built using Supabase, Teams bot, Slack bot, WhatsApp session integration, React/Next.js, and Python.",
 "Promoted to Full Stack Developer Intern in recognition of this project, taking on end-to-end ownership of the AI integration and backend decision layer.", 
-"Won an internal company hackathon for a project combining a repurposing AI tool with a Figma-to Webflow connection; made the repurposing AI component, using Jina.ai, Python, Supabase, and React.", 
+"Won an internal company hackathon for a project combining a repurposing AI tool with a Figma-to-Webflow connection; made the repurposing AI component, using Jina.ai, Python, Supabase, and React.", 
 "Worked on real client projects, gaining hands-on production experience",
       ],
     },
@@ -1679,7 +1677,7 @@ function App() {
           <section className="hero">
 
             <div className="hero-label">
-              DIGITAL PORTFOLIO // 01
+              DIGITAL PORTFOLIO
             </div>
 
 
@@ -1691,13 +1689,12 @@ function App() {
 
 
             <h3>
-              Full Stack Developer
+              Software Developer
             </h3>
 
 
             <p>
-              Building Design experiences
-              where technology meets creativity.
+            Building real products end-to-end, with a focus on AI integration with backend decision layers.
             </p>
 
 
