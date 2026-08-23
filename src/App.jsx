@@ -593,7 +593,7 @@ function AboutSection({
             </h2>
 
             <h3>
-              Full Stack Developer
+              Software Developer &amp; AI/ML Enthusiast 
             </h3>
 
             <span className="scroll-hint">
