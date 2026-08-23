@@ -141,7 +141,7 @@ canvas {
   font-family: "JetBrains Mono", monospace;
 
   font-size: 10px;
-  letter-spacing: 4px;
+  letter-spacing: 2px;
 
   color: #39ff88;
 
@@ -722,20 +722,6 @@ canvas {
    IMPORTANT:
    Identity + info are stacked vertically.
    They are NOT side-by-side.
-
-   FIX (clipping bug):
-   This block previously used justify-content: center on a
-   fixed-height, overflow:hidden column. When the combined
-   height of .about-identity + .about-info exceeded the
-   window's available height, content got clipped evenly
-   from BOTH the top and bottom (that's why "PURVI" was
-   sliced at the top and the bio/data was cut at the bottom).
-
-   Anchoring to the top with justify-content: flex-start
-   means any overflow only ever gets clipped/scrolled at the
-   bottom, never the top. An overflow-y: auto fallback is
-   added so if content still doesn't fit (very short window
-   heights), it scrolls instead of clipping.
 ========================================================= */
 
 .about-left {
@@ -830,9 +816,6 @@ canvas {
 
   font-family: "Space Grotesk", sans-serif;
 
-  /* FIX: clamp against viewport HEIGHT (vh) instead of just
-     width (vw), so the heading shrinks on short/laptop
-     screens instead of forcing the block to overflow. */
   font-size: clamp(42px, 5.5vh, 100px);
 
   line-height: 0.86;
@@ -856,7 +839,7 @@ canvas {
 
   font-weight: 400;
 
-  letter-spacing: 4px;
+  letter-spacing: 2px;
 
   color: #39ff88;
 }
@@ -1148,7 +1131,7 @@ canvas {
 
 
 /* =========================================================
-   TABLET
+   ABOUT WINDOW — TABLET
 ========================================================= */
 
 @media (max-width: 900px) {
@@ -1166,15 +1149,13 @@ canvas {
   .about-left {
     width: 60%;
 
-    padding:
-      40px
-      45px;
+    padding: 40px 45px;
   }
 
   .about-identity h2 {
     font-size: clamp(40px, 5vh, 75px);
 
-    letter-spacing: -4px;
+    letter-spacing: 2px;
   }
 
   .about-identity h3 {
@@ -1200,7 +1181,7 @@ canvas {
 
 
 /* =========================================================
-   MOBILE
+   ABOUT WINDOW — MOBILE
 ========================================================= */
 
 @media (max-width: 700px) {
@@ -1227,6 +1208,7 @@ canvas {
   .about-window-content {
     overflow-y: auto;
     overflow-x: hidden;
+    touch-action: pan-y;
 
     display: flex;
 
@@ -1258,9 +1240,7 @@ canvas {
     width: 100%;
     height: auto;
 
-    padding:
-      45px
-      30px;
+    padding: 45px 30px;
 
     overflow: visible;
 
@@ -1280,7 +1260,7 @@ canvas {
   .about-identity h2 {
     font-size: clamp(48px, 12vw, 70px);
 
-    letter-spacing: -4px;
+    letter-spacing: 2px;
   }
 
   .about-identity h3 {
@@ -1349,7 +1329,7 @@ canvas {
 
 
 /* =========================================================
-   SMALL MOBILE
+   ABOUT WINDOW — SMALL MOBILE
 ========================================================= */
 
 @media (max-width: 500px) {
@@ -1378,9 +1358,7 @@ canvas {
   }
 
   .about-left {
-    padding:
-      24px
-      22px;
+    padding: 24px 22px;
   }
 
   .about-identity h2 {
@@ -1420,8 +1398,28 @@ canvas {
   }
 }
 
+
 /* =========================================================
-   SKILLS WINDOW
+   =========================================================
+   SHARED TWO-COLUMN WINDOW LAYOUT
+   (Skills / Achievements / Projects / Experience / Contact)
+
+   All five sections share the same skeleton:
+     .{name}-window-content   → flex row, fills the window
+       .{name}-intro          → left 34% column, intro copy
+       .{name}-list (or
+        -groups)              → right 66% column, scrollable
+
+   Desktop rules for each are kept separate below (since class
+   names differ), but the TABLET and MOBILE breakpoints are
+   consolidated here — this is the single place to edit if the
+   shared layout needs to change again.
+   =========================================================
+========================================================= */
+
+
+/* =========================================================
+   SKILLS WINDOW (desktop)
 ========================================================= */
 
 .skills-window-content {
@@ -1477,7 +1475,7 @@ canvas {
 
   font-weight: 700;
 
-  letter-spacing: -4px;
+  letter-spacing: 2px;
 
   color: #eafff0;
 
@@ -1607,49 +1605,7 @@ canvas {
 
 
 /* =========================================================
-   SKILLS WINDOW — MOBILE
-========================================================= */
-
-@media (max-width: 700px) {
-
-  .skills-window-content {
-    overflow: hidden;
-
-    flex-direction: column;
-  }
-
-  .skills-intro {
-    flex: none;
-
-    width: 100%;
-    height: 22%;
-
-    padding: 18px 24px;
-
-    border-right: none;
-
-    border-bottom: 1px solid rgba(0, 255, 102, 0.15);
-
-    text-align: center;
-
-    align-items: center;
-  }
-
-  .skills-groups {
-    flex: 1;
-    width: 100%;
-    min-height: 0;
-
-    padding: 18px 24px;
-
-    overflow-y: auto;
-    overflow-x: hidden;
-    touch-action: pan-y;
-  }
-}
-
-/* =========================================================
-   ACHIEVEMENTS WINDOW
+   ACHIEVEMENTS WINDOW (desktop)
 ========================================================= */
 
 .achievements-window-content {
@@ -1696,19 +1652,12 @@ canvas {
 
 .achievements-intro h2 {
   margin: 18px 0 0;
-
   font-family: "Space Grotesk", sans-serif;
-
   font-size: clamp(38px, 4.5vh, 72px);
-
   line-height: 0.9;
-
   font-weight: 700;
-
-  letter-spacing: -4px;
-
+  letter-spacing: 2px;
   color: #eafff0;
-
   text-shadow:
     0 0 30px rgba(0, 255, 102, 0.16);
 }
@@ -1841,48 +1790,7 @@ canvas {
 
 
 /* =========================================================
-   ACHIEVEMENTS WINDOW — MOBILE
-========================================================= */
-
-@media (max-width: 700px) {
-
-  .achievements-window-content {
-    overflow: hidden;
-
-    flex-direction: column;
-  }
-
-  .achievements-intro {
-    flex: none;
-
-    width: 100%;
-    height: 24%;
-
-    padding: 18px 24px;
-
-    border-right: none;
-
-    border-bottom: 1px solid rgba(0, 255, 102, 0.15);
-
-    text-align: center;
-
-    align-items: center;
-  }
-
-  .achievements-list {
-    flex: 1;
-    width: 100%;
-    min-height: 0;
-
-    padding: 18px 24px;
-
-    overflow-y: auto;
-    overflow-x: hidden;
-    touch-action: pan-y;
-  }
-}
-/* =========================================================
-   PROJECTS WINDOW
+   PROJECTS WINDOW (desktop)
 ========================================================= */
 
 .projects-window-content {
@@ -1903,22 +1811,14 @@ canvas {
 
 .projects-intro {
   order: 1;
-
   flex: 0 0 34%;
-
   width: 34%;
   height: 100%;
-
   padding: 55px clamp(35px, 5vw, 60px);
-
   display: flex;
-
   flex-direction: column;
-
   justify-content: center;
-
   border-right: 1px solid rgba(0, 255, 102, 0.15);
-
   background:
     linear-gradient(
       160deg,
@@ -1929,54 +1829,35 @@ canvas {
 
 .projects-intro h2 {
   margin: 18px 0 0;
-
   font-family: "Space Grotesk", sans-serif;
-
   font-size: clamp(38px, 4.5vh, 72px);
-
   line-height: 0.9;
-
   font-weight: 700;
-
-  letter-spacing: -4px;
-
+  letter-spacing: 2px;
   color: #eafff0;
-
   text-shadow:
     0 0 30px rgba(0, 255, 102, 0.16);
 }
 
 .projects-intro p {
   margin-top: 22px;
-
   max-width: 320px;
-
   color: rgba(220, 255, 230, 0.6);
-
   font-family: "Space Grotesk", sans-serif;
-
   font-size: 13px;
-
   line-height: 1.8;
 }
 
 .projects-list {
   order: 2;
-
   flex: 1;
-
   width: 66%;
   height: 100%;
-
   padding: 55px clamp(35px, 5vw, 60px);
-
   overflow-y: auto;
   overflow-x: hidden;
-
   display: flex;
-
   flex-direction: column;
-
   gap: 22px;
 }
 
@@ -1994,172 +1875,89 @@ canvas {
 
 .project-card {
   padding: 20px 22px;
-
   border: 1px solid rgba(0, 255, 102, 0.18);
-
   background: rgba(0, 255, 102, 0.02);
-
   transition: border-color 0.25s ease, background 0.25s ease;
 }
 
 .project-card:hover {
   border-color: rgba(0, 255, 102, 0.4);
-
   background: rgba(0, 255, 102, 0.045);
 }
 
 .project-card-top {
   display: flex;
-
   align-items: center;
-
   justify-content: space-between;
-
   gap: 14px;
-
   margin-bottom: 12px;
 }
 
 .project-tag {
   font-family: "JetBrains Mono", monospace;
-
   font-size: 8px;
-
   letter-spacing: 2px;
-
   color: #39ff88;
-
   border: 1px solid rgba(0, 255, 102, 0.3);
-
   padding: 3px 8px;
 }
 
 .project-link {
   flex-shrink: 0;
-
   font-family: "JetBrains Mono", monospace;
-
   font-size: 9px;
-
   letter-spacing: 1.5px;
-
   color: #00ff66;
-
   text-decoration: none;
-
   border-bottom: 1px solid rgba(0, 255, 102, 0.4);
-
   padding-bottom: 1px;
-
   transition: color 0.2s ease, border-color 0.2s ease;
 }
 
 .project-link:hover {
   color: #eafff0;
-
   border-color: #eafff0;
 }
 
 .project-link-disabled {
   color: rgba(220, 255, 230, 0.3);
-
   border-bottom: 1px solid rgba(220, 255, 230, 0.15);
-
   cursor: default;
-
   pointer-events: none;
 }
 
 .project-title {
   font-family: "Space Grotesk", sans-serif;
-
   font-size: 16px;
-
   font-weight: 600;
-
   letter-spacing: -0.2px;
-
   color: #eafff0;
-
   margin-bottom: 10px;
 }
 
 .project-bullets {
   list-style: none;
-
   display: flex;
-
   flex-direction: column;
-
   gap: 6px;
 }
 
 .project-bullets li {
   position: relative;
-
   padding-left: 16px;
-
   font-family: "Space Grotesk", sans-serif;
-
   font-size: 13px;
-
   line-height: 1.7;
-
   color: rgba(220, 255, 230, 0.62);
 }
 
 .project-bullets li::before {
   content: "—";
-
   position: absolute;
-
   left: 0;
-
   color: rgba(0, 255, 102, 0.5);
 }
 
-
-/* =========================================================
-   PROJECTS WINDOW — MOBILE
-========================================================= */
-
-@media (max-width: 700px) {
-
-  .projects-window-content {
-    overflow: hidden;
-
-    flex-direction: column;
-  }
-
-  .projects-intro {
-    flex: none;
-
-    width: 100%;
-    height: 24%;
-
-    padding: 18px 24px;
-
-    border-right: none;
-
-    border-bottom: 1px solid rgba(0, 255, 102, 0.15);
-
-    text-align: center;
-
-    align-items: center;
-  }
-
-  .projects-list {
-    flex: 1;
-    width: 100%;
-    min-height: 0;
-
-    padding: 18px 24px;
-
-    overflow-y: auto;
-    overflow-x: hidden;
-    touch-action: pan-y;
-  }
-}
 
 /* =========================================================
    CONTACT TRIGGER BUTTON (TOP RIGHT)
@@ -2167,37 +1965,22 @@ canvas {
 
 .contact-trigger {
   position: absolute;
-
   top: 32px;
   right: 32px;
-
   pointer-events: auto;
-
   display: flex;
-
   align-items: center;
-
   gap: 8px;
-
   padding: 10px 16px;
-
   background: rgba(1, 10, 5, 0.55);
-
   border: 1px solid rgba(0, 255, 102, 0.3);
-
   color: #39ff88;
-
   font-family: "JetBrains Mono", monospace;
-
   font-size: 10px;
-
   letter-spacing: 2px;
-
   cursor: pointer;
-
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-
   transition:
     background 0.2s ease,
     color 0.2s ease,
@@ -2208,49 +1991,26 @@ canvas {
 
 .contact-trigger:hover {
   background: #00ff66;
-
   color: #010302;
-
   box-shadow: 0 0 18px rgba(0, 255, 102, 0.5);
 }
 
 .contact-trigger:hover .contact-trigger-dot {
   background: #010302;
-
   box-shadow: none;
 }
 
 .contact-trigger-dot {
   width: 6px;
   height: 6px;
-
   border-radius: 50%;
-
   background: #00ff66;
-
   box-shadow: 0 0 8px #00ff66;
 }
 
 
 /* =========================================================
-   CONTACT TRIGGER BUTTON — MOBILE
-========================================================= */
-
-@media (max-width: 700px) {
-
-  .contact-trigger {
-    top: 20px;
-    right: 20px;
-
-    padding: 8px 12px;
-
-    font-size: 9px;
-
-    letter-spacing: 1.5px;
-  }
-}
-/* =========================================================
-   CONTACT WINDOW
+   CONTACT WINDOW (desktop)
 ========================================================= */
 
 .contact-window-content {
@@ -2282,7 +2042,7 @@ canvas {
   font-size: clamp(38px, 4.5vh, 72px);
   line-height: 0.9;
   font-weight: 700;
-  letter-spacing: -4px;
+  letter-spacing: 2px;;
   color: #eafff0;
   text-shadow: 0 0 30px rgba(0, 255, 102, 0.16);
 }
@@ -2351,28 +2111,9 @@ canvas {
   border-color: #eafff0;
 }
 
-@media (max-width: 700px) {
-  .contact-window-content { overflow: hidden; flex-direction: column; }
-  .contact-intro {
-    flex: none; width: 100%; height: 24%;
-    padding: 18px 24px; border-right: none;
-    border-bottom: 1px solid rgba(0, 255, 102, 0.15);
-    text-align: center; align-items: flex-start;
-  }
-  .contact-list {
-    flex: 1;
-    width: 100%;
-    min-height: 0;
-    padding: 18px 24px;
-    overflow-y: auto;
-    overflow-x: hidden;
-    touch-action: pan-y;
-  }
-  .contact-item { flex-direction: column; align-items: center; gap: 4px; text-align: center; }
-  .contact-value { text-align: center; }
-}
+
 /* =========================================================
-   EXPERIENCE WINDOW
+   EXPERIENCE WINDOW (desktop)
 ========================================================= */
 
 .experience-window-content {
@@ -2404,7 +2145,7 @@ canvas {
   font-size: clamp(38px, 4.5vh, 72px);
   line-height: 0.9;
   font-weight: 700;
-  letter-spacing: -4px;
+  letter-spacing: 2px;;
   color: #eafff0;
   text-shadow: 0 0 30px rgba(0, 255, 102, 0.16);
 }
@@ -2530,14 +2271,248 @@ canvas {
   color: rgba(0, 255, 102, 0.5);
 }
 
-@media (max-width: 700px) {
-  .experience-window-content { overflow: hidden; flex-direction: column; }
-  .experience-intro {
-    flex: none; width: 100%; height: 24%;
-    padding: 18px 24px; border-right: none;
-    border-bottom: 1px solid rgba(0, 255, 102, 0.15);
-    text-align: center; align-items: flex-start;
+
+/* =========================================================
+   =========================================================
+   SHARED TABLET BREAKPOINT
+   Skills / Achievements / Projects / Experience / Contact
+
+   Narrows the 34% / 66% split to 40% / 60% and shrinks the
+   intro heading so nothing feels cramped at tablet widths.
+   (Mirrors the treatment .about-window already gets at 900px.)
+   =========================================================
+========================================================= */
+
+@media (max-width: 900px) {
+
+  .skills-intro,
+  .achievements-intro,
+  .projects-intro,
+  .experience-intro,
+  .contact-intro {
+    flex: 0 0 40%;
+    width: 40%;
+    padding: 40px clamp(28px, 4vw, 45px);
   }
+
+  .skills-intro h2,
+  .achievements-intro h2,
+  .projects-intro h2,
+  .experience-intro h2,
+  .contact-intro h2 {
+    font-size: clamp(32px, 4vh, 56px);
+  }
+
+  .skills-intro p,
+  .achievements-intro p,
+  .projects-intro p,
+  .experience-intro p,
+  .contact-intro p {
+    font-size: 12px;
+  }
+
+  .skills-groups,
+  .achievements-list,
+  .projects-list,
+  .experience-list,
+  .contact-list {
+    width: 60%;
+    padding: 40px clamp(28px, 4vw, 45px);
+  }
+}
+
+
+/* =========================================================
+   =========================================================
+   SHARED MOBILE BREAKPOINT
+   Skills / Achievements / Projects / Experience / Contact
+
+   THE FIX: on desktop each `-intro` panel is a flex column
+   with `justify-content: center` inside a fixed-percentage
+   `height` (22–24%). That's fine at desktop proportions, but
+   on a narrow mobile stack the intro's actual content (label
+   + heading + paragraph) is taller than that box. Centered
+   overflow bleeds out equally top AND bottom, so the bottom
+   half of the intro text rendered on top of the list below it
+   (the overlap seen in the screenshots).
+
+   Fix: let each intro size to its real content instead of a
+   fixed % height, and top-align it instead of centering.
+     height: auto      (was 22% / 24%)
+     flex: 0 0 auto     (was 0 0 22% / 24%)
+     justify-content: flex-start   (was center)
+   The sibling list panel already has flex:1 + min-height:0,
+   so it correctly absorbs the rest of the column and scrolls.
+   =========================================================
+========================================================= */
+
+@media (max-width: 700px) {
+
+  /* ---- SKILLS ---- */
+
+  .skills-window-content {
+    overflow: hidden;
+    flex-direction: column;
+  }
+
+  .skills-intro {
+    flex: 0 0 auto;
+    width: 100%;
+    height: auto;
+    padding: 18px 24px;
+    border-right: none;
+    border-bottom: 1px solid rgba(0, 255, 102, 0.15);
+    text-align: center;
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  .skills-groups {
+    flex: 1;
+    width: 100%;
+    min-height: 0;
+    padding: 18px 24px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    touch-action: pan-y;
+  }
+
+  /* ---- ACHIEVEMENTS ---- */
+
+  .achievements-window-content {
+    overflow: hidden;
+    flex-direction: column;
+  }
+
+  .achievements-intro {
+    flex: 0 0 auto;
+    width: 100%;
+    height: auto;
+    padding: 18px 24px;
+    border-right: none;
+    border-bottom: 1px solid rgba(0, 255, 102, 0.15);
+    text-align: center;
+    align-items: center;
+    justify-content: flex-start;
+  }
+  .achievements-intro h2 {
+  margin: 18px 0 0;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: clamp(38px, 4.5vh, 72px);
+  line-height: 0.9;
+  font-weight: 700;
+  letter-spacing: 2px;;
+  color: #eafff0;
+  text-shadow: 0 0 30px rgba(0, 255, 102, 0.16);
+}
+
+  .achievements-list {
+    flex: 1;
+    width: 100%;
+    min-height: 0;
+    padding: 18px 24px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    touch-action: pan-y;
+  }
+
+  /* ---- PROJECTS ---- */
+
+  .projects-window-content {
+    overflow: hidden;
+    flex-direction: column;
+  }
+
+  .projects-intro {
+    flex: 0 0 auto;
+    width: 100%;
+    height: auto;
+    padding: 18px 24px;
+    border-right: none;
+    border-bottom: 1px solid rgba(0, 255, 102, 0.15);
+    text-align: center;
+    align-items: center;
+    justify-content: flex-start;
+  }
+  .projects-intro h2 {
+  margin: 18px 0 0;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: clamp(38px, 4.5vh, 72px);
+  line-height: 0.9;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #eafff0;
+  text-shadow: 0 0 30px rgba(0, 255, 102, 0.16);
+}
+  .projects-list {
+    flex: 1;
+    width: 100%;
+    min-height: 0;
+    padding: 18px 24px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    touch-action: pan-y;
+  }
+
+  /* ---- CONTACT ---- */
+
+  .contact-window-content {
+    overflow: hidden;
+    flex-direction: column;
+  }
+
+  .contact-intro {
+    flex: 0 0 auto;
+    width: 100%;
+    height: auto;
+    padding: 18px 24px;
+    border-right: none;
+    border-bottom: 1px solid rgba(0, 255, 102, 0.15);
+    text-align: center;
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+
+  .contact-list {
+    flex: 1;
+    width: 100%;
+    min-height: 0;
+    padding: 18px 24px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    touch-action: pan-y;
+  }
+
+  .contact-item {
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    text-align: center;
+  }
+
+  .contact-value {
+    text-align: center;
+  }
+
+  /* ---- EXPERIENCE ---- */
+
+  .experience-window-content {
+    overflow: hidden;
+    flex-direction: column;
+  }
+
+  .experience-intro {
+    flex: 0 0 auto;
+    width: 100%;
+    height: auto;
+    padding: 18px 24px;
+    border-right: none;
+    border-bottom: 1px solid rgba(0, 255, 102, 0.15);
+    text-align: center;
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+
   .experience-list {
     flex: 1;
     width: 100%;
@@ -2547,9 +2522,39 @@ canvas {
     overflow-x: hidden;
     touch-action: pan-y;
   }
-  .experience-top { flex-direction: column; align-items: center; gap: 4px; }
-  .experience-org { text-align: center; }
-  .experience-bullets { text-align: center; }
-  .experience-bullets li { padding-left: 0; }
-  .experience-bullets li::before { display: none; }
+
+  .experience-top {
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .experience-org {
+    text-align: center;
+  }
+
+  .experience-bullets {
+    text-align: center;
+  }
+
+  .experience-bullets li {
+    padding-left: 0;
+  }
+
+  .experience-bullets li::before {
+    display: none;
+  }
+
+  /* ---- CONTACT TRIGGER BUTTON ---- */
+
+  .contact-trigger {
+    top: 20px;
+    right: 20px;
+
+    padding: 8px 12px;
+
+    font-size: 9px;
+
+    letter-spacing: 1.5px;
+  }
 }

@@ -404,6 +404,7 @@ function AboutSection({
   const onWheelRef = useRef(onWheel);
   const aboutProgressRef = useRef(aboutProgress);
   const touchStartY = useRef(null);
+  const isPhone = window.matchMedia("(max-width: 700px)").matches;
 
   useEffect(() => {
     onWheelRef.current = onWheel;
@@ -416,35 +417,29 @@ function AboutSection({
   useEffect(() => {
     const el = sectionRef.current;
     if (!el) return;
+    if (window.matchMedia("(max-width: 700px)").matches) return;
 
     const handleDelta = (deltaY) => {
-      const contentEl = sectionRef.current?.querySelector(
-        ".about-window-content"
-      );
-      const scrollingDown = deltaY > 0;
-      const atMax = aboutProgressRef.current >= 1;
-      const contentScrollTop = contentEl ? contentEl.scrollTop : 0;
-      const contentAtMax = contentEl
-        ? contentScrollTop + contentEl.clientHeight >= contentEl.scrollHeight - 1
-        : true;
+  const contentEl = sectionRef.current?.querySelector(".about-left"); // was ".about-window-content"
+  const scrollingDown = deltaY > 0;
+  const atMax = aboutProgressRef.current >= 1;
+  const contentScrollTop = contentEl ? contentEl.scrollTop : 0;
+  const contentAtMax = contentEl
+    ? contentScrollTop + contentEl.clientHeight >= contentEl.scrollHeight - 1
+    : true;
 
-      // Fade fully revealed, scrolling further down
-      // → manually scroll the mobile window content down.
-      if (atMax && scrollingDown && contentEl && !contentAtMax) {
-        contentEl.scrollTop += deltaY;
-        return;
-      }
+  if (atMax && scrollingDown && contentEl && !contentAtMax) {
+    contentEl.scrollTop += deltaY;
+    return;
+  }
 
-      // .about-left has scrolled content, scrolling up
-      // → manually scroll it back toward the top first.
-      if (!scrollingDown && contentScrollTop > 0 && contentEl) {
-        contentEl.scrollTop += deltaY;
-        return;
-      }
+  if (!scrollingDown && contentScrollTop > 0 && contentEl) {
+    contentEl.scrollTop += deltaY;
+    return;
+  }
 
-      // Otherwise: drive the identity/bio fade animation.
-      onWheelRef.current(deltaY);
-    };
+  onWheelRef.current(deltaY);
+};
 
     const wheelHandler = (event) => {
       event.preventDefault();
@@ -486,15 +481,15 @@ function AboutSection({
   */
 
   const identityOpacity = Math.max(
-    0,
-    1 - aboutProgress * 1.5
+    0.25,
+    1 - aboutProgress * 0.75
   );
 
   const identityShift =
-    -aboutProgress * 22;
+    -aboutProgress * 12;
 
   const paragraphOpacity = Math.max(
-    0,
+    0.35,
     Math.min(
       1,
       (aboutProgress - 0.15) * 1.6
@@ -502,7 +497,7 @@ function AboutSection({
   );
 
   const paragraphShift =
-    (1 - paragraphOpacity) * 26;
+    (1 - paragraphOpacity) * 16;
 
   return (
     <section
@@ -584,8 +579,10 @@ function AboutSection({
           <div
             className="about-identity"
             style={{
-              opacity: identityOpacity,
-              transform: `translateY(${identityShift}px)`,
+              opacity: isPhone ? 1 : identityOpacity,
+              transform: isPhone
+                ? "none"
+                : `translateY(${identityShift}px)`,
             }}
           >
 
@@ -615,8 +612,10 @@ function AboutSection({
             <div
               className="about-paragraphs"
               style={{
-                opacity: paragraphOpacity,
-                transform: `translateY(${paragraphShift}px)`,
+                opacity: isPhone ? 1 : paragraphOpacity,
+                transform: isPhone
+                  ? "none"
+                  : `translateY(${paragraphShift}px)`,
               }}
             >
 
@@ -635,8 +634,10 @@ function AboutSection({
             <div
               className="about-education"
               style={{
-                opacity: paragraphOpacity,
-                transform: `translateY(${paragraphShift}px)`,
+                opacity: isPhone ? 1 : paragraphOpacity,
+                transform: isPhone
+                  ? "none"
+                  : `translateY(${paragraphShift}px)`,
               }}
             >
 
@@ -764,15 +765,6 @@ function AboutSection({
         <span>
           SYSTEM://USER_PROFILE
         </span>
-
-        <span>
-          ACCESS_LEVEL: 01
-        </span>
-
-        <span>
-          CONNECTION: STABLE
-        </span>
-
       </div>
 
     </section>
@@ -933,15 +925,6 @@ function SkillsSection({ onClose }) {
         <span>
           SYSTEM://SKILL_MATRIX
         </span>
-
-        <span>
-          ACCESS_LEVEL: 02
-        </span>
-
-        <span>
-          CONNECTION: STABLE
-        </span>
-
       </div>
 
     </section>
@@ -967,7 +950,7 @@ function AchievementsSection({ onClose }) {
       title: "Dewang Mehta IT Award",
       org: "Project Recognition",
       description:
-        "Project selected for the Dewang Mehta IT Award, recognizing excellence and innovation in IT-driven work.",
+        "Project selected for the Dewang Mehta IT Award, for innovation in IT-driven work.",
     },
   ];
 
@@ -1053,15 +1036,6 @@ function AchievementsSection({ onClose }) {
         <span>
           SYSTEM://ACHIEVEMENT_LOG
         </span>
-
-        <span>
-          ACCESS_LEVEL: 03
-        </span>
-
-        <span>
-          CONNECTION: STABLE
-        </span>
-
       </div>
 
     </section>
@@ -1212,15 +1186,6 @@ function ProjectsSection({ onClose }) {
         <span>
           SYSTEM://PROJECT_ARCHIVE
         </span>
-
-        <span>
-          ACCESS_LEVEL: 04
-        </span>
-
-        <span>
-          CONNECTION: STABLE
-        </span>
-
       </div>
 
     </section>
@@ -1251,13 +1216,13 @@ function ContactSection({ onClose }) {
     },
     {
       label: "GITHUB",
-      value: "github.com/yourusername",
-      href: null,
+      value: "github.com/PurviBhati",
+      href: "https://github.com/PurviBhati",
     },
     {
       label: "LINKEDIN",
-      value: "linkedin.com/in/yourusername",
-      href: null,
+      value: "linkedin.com/in/purvibhatia",
+      href: "https://www.linkedin.com/in/purvibhatia",
     },
   ];
 
@@ -1342,15 +1307,6 @@ function ContactSection({ onClose }) {
         <span>
           SYSTEM://CONTACT_LINK
         </span>
-
-        <span>
-          ACCESS_LEVEL: 05
-        </span>
-
-        <span>
-          CONNECTION: STABLE
-        </span>
-
       </div>
 
     </section>
@@ -1474,15 +1430,6 @@ function ExperienceSection({ onClose }) {
         <span>
           SYSTEM://WORK_LOG
         </span>
-
-        <span>
-          ACCESS_LEVEL: 06
-        </span>
-
-        <span>
-          CONNECTION: STABLE
-        </span>
-
       </div>
 
     </section>
